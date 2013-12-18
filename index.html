@@ -18,17 +18,34 @@
 <script src="js/jquery-ui.js"></script>
 <script src="js/jquery.tablesorter.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
+<script src="js/droparea.js"></script>
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTdZniWL-51geqo9kfGg1YxjtIfgVdkIs&sensor=false">
 </script>
 
 <script src="js/patents.js"></script>
 
+<script>
+
+
+$(function(){
+
+	$('#dropbox').droparea();
+	
+	
+})
+
+</script>
+
 </head>
 <body>
 	
 	<div class='container'>
+		<div class='row'>
+			<div class="col-md-6">
+				<input type='file' id='drop' data-height="100" data-width="100" data-type="txt,TXT,csv,CSV"/>
+			</div>
+		</div>
 		<div class='row'>
 			<div class='col-md-6'>
 				<div class='panel panel-default'>
