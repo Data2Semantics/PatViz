@@ -1,3 +1,6 @@
 *.TXT
 js/jquery*.js
 *_old.html
+*.tmproj
+*.ipynb
+*.csv
