@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Patents Visualizer</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+<style type="text/css"> 
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map-canvas { width: 100%; height: 500px; }
+</style>
+
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/jquery.tablesorter.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTdZniWL-51geqo9kfGg1YxjtIfgVdkIs&sensor=false">
+</script>
+
+<script src="js/patents.js"></script>
+
+</head>
+<body>
+	
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-6'>
+				<div class='panel panel-default'>
+					<div class='panel-heading'>
+						Controls
+					</div>
+					<div class='panel-body'>
+						<div id="selector" class="form-group">
+							<label for="datasetSelector">Select Dataset</label>
+							<select id="datasetSelector" name="dataset" class="form-control">
+								<option selected value="none">Please select a dataset</option>
+								<option value="PAT">USPTO (without edges)</option>
+								<option value="Z">USPTO (Z-tested)</option>
+								<option value="patstat">PATSTAT</option>
+							</select>
+						</div>
+						<div id="year"></div>
+						<div id="slider"></div>
+						<div class='btn btn-small btn-default disabled' id='play'>Play</div>
+						<div class='btn btn-small btn-default disabled' id='stop'>Stop</div>
+					</div>
+				</div>
+			</div>
+			<div class='col-md-3'>
+				<div class='panel panel-default'>
+					<div class='panel-heading'>
+						Legend
+					</div>
+					<div id='legendpane' class='panel-body'>
+					</div>
+				</div>
+			</div>
+			<div class='col-md-3'>
+				<div class='panel panel-default'>
+					<div class='panel-heading'>
+						Information
+					</div>
+					<div id='infopane' class='panel-body'>
+					<p>Hover over a circle, and information will be shown here...</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class='col-md-12'>
+				<div id="map-canvas"></div>
+			</div>
+		</div>
+		<!-- <div class="row">
+			<div class='col-md-12'>
+				<table id="results" class="tablesorter table table-striped">
+					<thead>
+						<tr>
+							<th>Year</th>
+							<th>Name</th>
+							<th>N</th>
+							<th>Rank</th>
+							<th>Color</th>
+						</tr>
+					</thead>
+					<tbody id="resultsbody">
+					</tbody>
+				</table>
+			</div>
+		</div> -->
+	</div>
+	
+
+
+	
+</body>
+
+</html>
