@@ -10,6 +10,7 @@ var initialzoom = 2;
 var firstyear;
 var lastyear;
 var initialyear;
+var currentyear;
 
 var years = [];
 
@@ -48,6 +49,7 @@ $(function () {
 	
 	$("#play").hide();
 	$("#stop").hide();
+	$("#yearcontrol").hide();
 	
 	$("#play").on("click", function(){
 		play();
@@ -56,6 +58,15 @@ $(function () {
 	$("#stop").on("click", function(){
 		stop();
 	});
+	
+	$("#decrease").on("click", function(){
+		decrease();
+	});
+	
+	$("#increase").on("click", function(){
+		increase();
+	});
+	
 	
 	console.log("Initializing...");
 	
@@ -137,7 +148,7 @@ function initialize(years, filedict) {
 	initialyear = years[0];
 	firstyear = initialyear;
 	lastyear = years[years.length-1];
-	
+	currentyear = 0;
 	
 	var mapOptions = {
 		center: new google.maps.LatLng(10, 0),
@@ -149,28 +160,29 @@ function initialize(years, filedict) {
 	    mapOptions);
 	
 
-	$("#slider").slider({
-		value: initialyear,
-		min: firstyear,
-		max: lastyear,
-		step: 1,
-		slide : function(event, ui) {
-			console.log(event);
-			console.log(ui);
-			console.log("Slider changed!");
-			$("#year").html(ui.value);
-
-			if (ui.value in years) {
-				// Show the map for the selected period
-				show_map(ui.value);
-			} else {
-				console.log("Year does not contain data");
-			}
-		}
-	});
+	// $("#slider").slider({
+	// 	value: initialyear,
+	// 	min: firstyear,
+	// 	max: lastyear,
+	// 	step: 1,
+	// 	slide : function(event, ui) {
+	// 		console.log(event);
+	// 		console.log(ui);
+	// 		console.log("Slider changed!");
+	// 		$("#year").html(ui.value);
+	// 
+	// 		if (ui.value in years) {
+	// 			// Show the map for the selected period
+	// 			show_map(ui.value);
+	// 		} else {
+	// 			console.log("Year does not contain data");
+	// 		}
+	// 	}
+	// });
 	
 	$("#play").show();
 	$("#stop").show();
+	$("#yearcontrol").show();
 	
 	$("#year").html("Loading...");
 	for (var i in years){
@@ -180,9 +192,6 @@ function initialize(years, filedict) {
 	showLegend();
 	
 	show_map(initialyear);
-
-	$( "#slider" ).slider( "option", "draggable", true );
-	$( "#slider" ).slider( "option", "animate", "fast" );
 
 	$("#year").html(initialyear);
 	
@@ -410,9 +419,9 @@ function play(){
 		}
 		y = years[playyear];
 		$("#year").html(y);
-		$("#slider").slider('value', y);
 		show_map(y);
 		playyear += 1;
+		currentyear = playyear;
 	},2000);
 }
 
@@ -420,4 +429,24 @@ function stop(){
 	$("#play").toggleClass("disabled");
 	$("#stop").toggleClass("disabled");
 	window.clearInterval(playtimer);
+}
+
+function decrease(){
+	if (currentyear > 0){
+		currentyear = currentyear - 1;
+		y = years[currentyear];
+		$("#year").html(y);
+		show_map(y);
+		
+	}
+}
+
+function increase(){
+	if (currentyear < years.length-1){
+		currentyear = currentyear + 1;
+		y = years[currentyear];
+		$("#year").html(y);
+		show_map(y);
+		
+	}
 }
