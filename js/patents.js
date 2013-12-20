@@ -14,6 +14,11 @@ var currentyear;
 
 var years = [];
 
+var demos = {uspto: {description: 'USPTO CuInSe2', start: 1974, end: 2008, url: 'http://semweb.cs.vu.nl:/patents2/ztest/', prefix: 'z' }}
+
+
+
+
 var colors = {};
 
 var filedict = {};
@@ -45,6 +50,8 @@ $(function () {
 		setup_reader(files, 0);
 	});
 	
+	
+	
 	// $("#slider").slider();
 	
 	$("#play").hide();
@@ -68,13 +75,59 @@ $(function () {
 	});
 	
 	
-	console.log("Initializing...");
+	for (d in demos){
+		console.log(d);
+		demo = demos[d];
+		
+		var demo_button = $('<div>'+demo.description+'</div>');
+		demo_button.addClass('btn btn-info btn-lg');
+		
+		demo_button.on('click', function(e){
+			// Reset the years array
+			years = [];
+			// Reset the file dictionary
+			filedict = {};
+			
+			get_from_server(demo,demo.start);
+		});
+		
+		$('#demos').append(demo_button);
+	}
 	
+	console.log("Initializing...");
 });
 
 // $(document).ready(function(){
 // 	$("#results").tablesorter(); 
 // });
+
+
+function get_from_server(demo, y){
+	var url = demo.url + demo.prefix + y + ".txt";
+	
+	$.get(url, function(data){
+		filedict[y] = data;
+		years.push(y)
+		
+		if (y <= demo.end){
+			get_from_server(demo, y+1);
+		} else {
+			years.sort();
+			initialize(years, filedict);
+		}
+	
+	}).fail(function(){
+		if (y <= demo.end){
+			get_from_server(demo, y+1);
+		} else {
+			years.sort();
+			initialize(years, filedict);
+		}
+		
+	});
+	
+	
+}
 
 
 function setup_reader(files, i) {
