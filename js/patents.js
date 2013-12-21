@@ -83,7 +83,7 @@ $(function () {
 		console.log(s);
 		var demoset = demos[s];
 		
-		var demoset_header = $('<li role="presentation" class="dropdown-header">'+ s +'</li>');
+		var demoset_header = $('<li></li>');
 		
 		$('#demos').append(demoset_header);
 		
@@ -92,7 +92,7 @@ $(function () {
 			demo = demoset[d];
 		
 			// <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-			var demo_button = $('<a role="menuitem" tabindex="-1" href="#">'+demo.description+'</a>');
+			var demo_button = $('<div class="btn btn-default navbar-btn">Demo '+demo.description+'</div>');
 		
 			demo_button.on('click', {demo: demo}, function(e){
 				var demo = e.data.demo;
@@ -104,10 +104,9 @@ $(function () {
 				get_from_server(demo,demo.start);
 			});
 		
-			var demo_li = $('<li role="presentation"></li>');
-			demo_li.append(demo_button);
+			demoset_header.append(demo_button);
 		
-			$('#demos').append(demo_li);
+
 		}
 		
 	}
