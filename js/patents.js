@@ -14,7 +14,11 @@ var currentyear;
 
 var years = [];
 
-var demos = {uspto: {description: 'USPTO CuInSe2', start: 1974, end: 2008, url: 'http://semweb.cs.vu.nl:/patents2/ztest/', prefix: 'z' }}
+var demos = {'CPC is Y02E10/541: CuInSe2 material PV cells': [
+				{description: 'USPTO', start: 1974, end: 2008, url: 'http://semweb.cs.vu.nl/patents2/ztest/', prefix: 'z' },
+				{description: 'PatStat', start: 1974, end: 2008, url:'http://semweb.cs.vu.nl/patents2/patstat/', prefix: 'pat'}
+				]
+			};
 
 
 
@@ -75,23 +79,36 @@ $(function () {
 	});
 	
 	
-	for (d in demos){
-		console.log(d);
-		demo = demos[d];
+	for (s in demos){
+		console.log(s);
+		var demoset = demos[s];
 		
-		var demo_button = $('<div>'+demo.description+'</div>');
-		demo_button.addClass('btn btn-info btn-lg');
+		var demoset_header = $('<li role="presentation" class="dropdown-header">'+ s +'</li>');
 		
-		demo_button.on('click', function(e){
-			// Reset the years array
-			years = [];
-			// Reset the file dictionary
-			filedict = {};
+		$('#demos').append(demoset_header);
+		
+		for (d in demoset){
+			console.log(d);
+			demo = demoset[d];
+		
+			// <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+			var demo_button = $('<a role="menuitem" tabindex="-1" href="#">'+demo.description+'</a>');
+		
+			demo_button.on('click', function(e){
+				// Reset the years array
+				years = [];
+				// Reset the file dictionary
+				filedict = {};
 			
-			get_from_server(demo,demo.start);
-		});
+				get_from_server(demo,demo.start);
+			});
 		
-		$('#demos').append(demo_button);
+			var demo_li = $('<li role="presentation"></li>');
+			demo_li.append(demo_button);
+		
+			$('#demos').append(demo_li);
+		}
+		
 	}
 	
 	console.log("Initializing...");
@@ -295,9 +312,10 @@ function initialize_nodes(year, data){
 			
 			var color = csv[row][5].toLowerCase();
 			var title = csv[row][3]; 
-			var descriptionarray = csv[row][4].split(";")
-			var description = descriptionarray.join("<br/>");
+			// var descriptionarray = csv[row][4].split(";")
+// 			var description = descriptionarray.join("<br/>");
 			
+			var description = csv[row][4];
 			
 			var n;
 			var N = parseFloat(csv[row][6]);
@@ -419,22 +437,17 @@ function getRadius(size,zoom){
 }
 
 function showDetails(node) {
-	var table = $('<table></table>');
-	table.addClass('table');
-	table.addClass('table-striped');
-	
-	table.append('<tr><th>Name</th><td>'+node.title.split(";").join("<br/>")+'</td></tr>');
-	table.append('<tr><th>Description</th><td>'+node.description+'</td></tr>');
-	$('#infopane').html(table);
+	var name = $('<span><strong>Name</strong>: '+node.title.split(";").join(",")+"</span>");
+	var description = $('<span>&nbsp; <strong>Description</strong>: '+node.description.split(";").join(',')+"</span>");
+	$('#infopane').html(name);
+	$('#infopane').append(description);
 }
 
 function showEdgeDetails(edge) {
-	var table = $('<table></table>');
-	table.addClass('table');
-	table.addClass('table-striped');
-	
-	table.append('<tr><th>Edge</th><td>'+edge.label+'</td></tr>');
-	table.append('<tr><th>Weight</th><td>'+edge.weight+'</td></tr>');
+	var name = $('<span><strong>Name</strong>: '+edge.label+"</span>");
+	var description = $('<span>&nbsp; <strong>Weight</strong>: '+edge.weight+"</span>");
+	$('#infopane').html(name);
+	$('#infopane').append(description);
 	
 	$('#infopane').html(table);
 }

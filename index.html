@@ -39,7 +39,7 @@
 <script src="js/jquery-1.10.2.min.js"></script>
 <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
 <script src="js/jquery-ui.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
 
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTdZniWL-51geqo9kfGg1YxjtIfgVdkIs&sensor=false">
@@ -51,57 +51,54 @@
 
 </head>
 <body>
+	<nav class="navbar navbar-default" role="navigation">
+	  <!-- Brand and toggle get grouped for better mobile display -->
+	  <div class="navbar-header">
+	    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	      <span class="sr-only">Toggle navigation</span>
+	      <span class="icon-bar"></span>
+	    </button>
+	    <a class="navbar-brand" href="#">PatViz</a>
+	  </div>
+
+	  <!-- Collect the nav links, forms, and other content for toggling -->
+	  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	    <ul class="nav navbar-nav">
+	      <li><div class="btn btn-primary btn-file navbar-btn" >
+    								Select files to display... <input type="file" id="fileinput" multiple/>						
+    							</div></li>
+	      <li class="dropdown">
+			  
+			  <div class="btn btn-default dropdown-toggle navbar-btn" id="dropdownMenu1" data-toggle="dropdown">
+			    Example Datasets
+			    <span class="caret"></span>
+			  </div>
+			  <ul class="dropdown-menu" id="demos" role="menu" aria-labelledby="dropdownMenu1">
+			  </ul>
+	      </li>
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right" id='yearcontrol'>
+			<li>
+			<span id="decrease" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-chevron-left"></span></span>
+			</li>
+			<li><span id="year"></span></li>
+			<li><span id="increase" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-chevron-right"></span></span></li>
+			<li><div class='btn btn-success disabled navbar-btn' id='play'>Play</div></li>
+			<li><div class='btn btn-danger disabled navbar-btn' id='stop'>Stop</div></li>
+			<!-- Button trigger modal -->
+			<li><div class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+			  Legend
+			</div></li>
+			
+	    </ul>
+	  </div><!-- /.navbar-collapse -->
+	</nav>
+	
 	
 	<div class='container'>
 		<div class='row'>
-			<div class='col-md-6'>
+			<div class='col-md-12'>
 				<div class='panel panel-default'>
-					<div class='panel-heading'>
-						Controls
-					</div>
-					<div class='panel-body'>
-						<div id="selector" class="form-group">
-							<!-- <label for="fileinput">Select files</label> -->
-							<span class="btn btn-lg btn-primary btn-file">
-								Select files to display... <input type="file" id="fileinput" multiple/>						
-							</span>
-							<span id="demos">
-							</span>
-<!-- 							<label for="datasetSelector">Select Dataset</label>
-							<select id="datasetSelector" name="dataset" class="form-control">
-								<option selected value="none">Please select a dataset</option>
-								<option value="PAT">USPTO (without edges)</option>
-								<option value="Z">USPTO (Z-tested)</option>
-								<option value="patstat">PATSTAT</option>
-							</select> -->
-						</div>
-						<!-- <div id="slider"></div> -->
-						<div id="yearcontrol">
-							<span id="decrease" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-chevron-left"></span></span>
-							<span id="year"></span>
-							<span id="increase" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-chevron-right"></span></span>
-							<div class='btn btn-lg btn-success disabled' id='play'>Play</div>
-							<div class='btn btn-lg btn-danger disabled' id='stop'>Stop</div>
-						</div>
-					</div>
-				</div>
-
-				
-			</div>
-			<div class='col-md-3'>
-				<div class='panel panel-default'>
-					<div class='panel-heading'>
-						Legend
-					</div>
-					<div id='legendpane' class='panel-body'>
-					</div>
-				</div>
-			</div>
-			<div class='col-md-3'>
-				<div class='panel panel-default'>
-					<div class='panel-heading'>
-						Information
-					</div>
 					<div id='infopane' class='panel-body'>
 					<p>Hover over a circle, and information will be shown here...</p>
 					</div>
@@ -148,7 +145,24 @@
 	
 
 
-	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Legend</h4>
+	      </div>
+	      <div class="modal-body" id="legendpane">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>	
 </body>
 
 </html>
