@@ -94,7 +94,8 @@ $(function () {
 			// <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
 			var demo_button = $('<a role="menuitem" tabindex="-1" href="#">'+demo.description+'</a>');
 		
-			demo_button.on('click', function(e){
+			demo_button.on('click', {demo: demo}, function(e){
+				var demo = e.data.demo;
 				// Reset the years array
 				years = [];
 				// Reset the file dictionary
