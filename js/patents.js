@@ -14,12 +14,9 @@ var currentyear;
 
 var years = [];
 
-var demos = {'CPC is Y02E10/541: CuInSe2 material PV cells': [
-				{description: 'USPTO', start: 1974, end: 2008, url: 'http://semweb.cs.vu.nl/patents2/ztest/', prefix: 'z' },
-				{description: 'PatStat', start: 1974, end: 2008, url:'http://semweb.cs.vu.nl/patents2/patstat/', prefix: 'pat'}
-				]
-			};
 
+
+var data_cache;
 
 
 
@@ -28,36 +25,6 @@ var colors = {};
 var filedict = {};
 
 $(function () {
-	
-	// $("#datasetSelector").on("change", function(){
-	// 	$("#datasetSelector option:selected").each(function(){
-	// 		var type = $(this).attr("value");
-	// 		stop();
-	// 		
-	// 		if(type!="none"){
-	// 			initialize(type);
-	// 		}
-	// 	});	
-	// });
-	
-	
-	$("#fileinput").on('change', function(e){
-		console.log("Selected files!");
-		var files = $("#fileinput")[0].files;
-		console.log(files);
-		
-		// Reset the years array
-		years = [];
-		// Reset the file dictionary
-		filedict = {};
-
-		setup_reader(files, 0);
-	});
-	
-	
-	
-	// $("#slider").slider();
-	
 	$("#play").hide();
 	$("#stop").hide();
 	$("#yearcontrol").hide();
@@ -77,7 +44,50 @@ $(function () {
 	$("#increase").on("click", function(){
 		increase();
 	});
+    
+    
+    if (window['exported'] != undefined){
+        console.log("Exported");
+        
+        initialize_exported();
+        
+    } else {
+        console.log("Original");
+        
+        initialize_original();
+        
+    }
+});
+
+function initialize_exported(){
+    console.log('Initializing exported page...');
+    
+    data_cache = data_export;
+    
+    get_from_data_cache();
+}
+
+
+function initialize_original(){
+    data_cache = {'data': {},'years': []};
 	
+	$("#fileinput").on('change', function(e){
+		console.log("Selected files!");
+		var files = $("#fileinput")[0].files;
+		console.log(files);
+		
+		// Reset the years array
+		years = [];
+		// Reset the file dictionary
+		filedict = {};
+
+		setup_reader(files, 0);
+	});
+	
+	
+    $("#save-button").on("click",function(){
+        save();
+    })
 	
 	for (s in demos){
 		console.log(s);
@@ -91,7 +101,6 @@ $(function () {
 			console.log(d);
 			demo = demoset[d];
 		
-			// <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
 			var demo_button = $('<div class="btn btn-default navbar-btn">Demo '+demo.description+'</div>');
 		
 			demo_button.on('click', {demo: demo}, function(e){
@@ -105,32 +114,30 @@ $(function () {
 			});
 		
 			demoset_header.append(demo_button);
-		
-
 		}
-		
 	}
-	
-	console.log("Initializing...");
-});
+}
 
-// $(document).ready(function(){
-// 	$("#results").tablesorter(); 
-// });
+function get_from_data_cache(){
+    console.log('Just use the data cache directly!');
+    
+    initialize(data_cache);
+}
 
 
 function get_from_server(demo, y){
 	var url = demo.url + demo.prefix + y + ".txt";
 	
 	$.get(url, function(data){
-		filedict[y] = data;
+		data_cache['data'][y] = $.csv.toArrays(data);
 		years.push(y)
 		
 		if (y <= demo.end){
 			get_from_server(demo, y+1);
 		} else {
 			years.sort();
-			initialize(years, filedict);
+            data_cache['years'] = years;
+			initialize(data_cache);
 		}
 	
 	}).fail(function(){
@@ -138,7 +145,8 @@ function get_from_server(demo, y){
 			get_from_server(demo, y+1);
 		} else {
 			years.sort();
-			initialize(years, filedict);
+            data_cache['years'] = years;
+			initialize(data_cache);
 		}
 		
 	});
@@ -185,13 +193,11 @@ function setup_reader(files, i) {
 }
 
 function readerLoaded(e, files, i, year){
-  // We'll do something interesting with the result later
-  
-  console.log("Added file to filedict");
-  filedict[year] = e.target.result;
+  console.log("Added file to data_cache");
+  data_cache['data'][year] = $.csv.toArrays(e.target.result);
   
   console.log(year);
-  console.log(filedict[year]);
+  console.log(data_cache['data'][year]);
   
   if (i < files.length -1) {
 	  console.log("Reading next file...");
@@ -199,12 +205,13 @@ function readerLoaded(e, files, i, year){
   } else {
 	  console.log("done loading");
 	  years.sort();
-	  initialize(years, filedict);
+      data_cache['years'] = years;
+	  initialize(data_cache);
   }
 }
 
 
-function initialize(years, filedict) {
+function initialize(data_cache) {
 	console.log("Initializing")
 	
 	// Reset the nodes and edges arrays
@@ -214,6 +221,8 @@ function initialize(years, filedict) {
 	$("#play").addClass("disabled");
 	$("#stop").addClass("disabled");
 	
+    years = data_cache['years'];
+    console.log(years);
 	
 	initialyear = years[0];
 	firstyear = initialyear;
@@ -230,25 +239,7 @@ function initialize(years, filedict) {
 	    mapOptions);
 	
 
-	// $("#slider").slider({
-	// 	value: initialyear,
-	// 	min: firstyear,
-	// 	max: lastyear,
-	// 	step: 1,
-	// 	slide : function(event, ui) {
-	// 		console.log(event);
-	// 		console.log(ui);
-	// 		console.log("Slider changed!");
-	// 		$("#year").html(ui.value);
-	// 
-	// 		if (ui.value in years) {
-	// 			// Show the map for the selected period
-	// 			show_map(ui.value);
-	// 		} else {
-	// 			console.log("Year does not contain data");
-	// 		}
-	// 	}
-	// });
+
 	
 	$("#play").show();
 	$("#stop").show();
@@ -256,7 +247,7 @@ function initialize(years, filedict) {
 	
 	$("#year").html("Loading...");
 	for (var i in years){
-		initialize_nodes(years[i], filedict[years[i]]);
+		initialize_nodes(years[i], data_cache['data'][years[i]] );
 	}
 	
 	showLegend();
@@ -295,30 +286,30 @@ function initialize_nodes(year, data){
 	$("#year").append(" "+year+" ");
 	
 	console.log("Initializing nodes for "+year);
-	var csv = $.csv.toArrays(data);
 	
+	
+
+    
 	var from;
 	var fromlatlong;
 	var tolatlong;
 	
-	for(var row in csv) {
+	for(var row in data) {
 		if (row == 0) {
 			continue;
 		}
 		
-		if (csv[row][0] == 'W') {
-			var latlong = new google.maps.LatLng(csv[row][1],csv[row][2]);
+		if (data[row][0] == 'W') {
+			var latlong = new google.maps.LatLng(data[row][1],data[row][2]);
 
 			
-			var color = csv[row][5].toLowerCase();
-			var title = csv[row][3]; 
-			// var descriptionarray = csv[row][4].split(";")
-// 			var description = descriptionarray.join("<br/>");
+			var color = data[row][5].toLowerCase();
+			var title = data[row][3]; 
 			
-			var description = csv[row][4];
+			var description = data[row][4];
 			
 			var n;
-			var N = parseFloat(csv[row][6]);
+			var N = parseFloat(data[row][6]);
 			
 			n = N*10;
 			
@@ -362,16 +353,6 @@ function initialize_nodes(year, data){
 			// Append the marker to the nodes
 			nodes.push(marker);
 			
-			// var tr = $("<tr></tr>");
-			// 
-			// tr.append("<td>" + year + "</td>");
-			// tr.append("<td>" + title + "</td>");
-			// tr.append("<td>" + descriptionarray[0] + "</td>");
-			// tr.append("<td>" + descriptionarray[descriptionarray.length - 1]+ "</td>");
-			// tr.append("<td>" + color + "</td>");
-			// 
-			// $("#resultsbody").append(tr);
-			
 			
 			if (!(color in colors)){
 				var valarray = description.split(" ");
@@ -380,17 +361,17 @@ function initialize_nodes(year, data){
 				colors[color] = val;
 			}
 			
-		} else if (csv[row][0] == "") {
+		} else if (data[row][0] == "") {
 			from = "";
 		} else {
 			
 			if (from == "") {
-				fromlatlong = new google.maps.LatLng(csv[row][1],csv[row][2]);
+				fromlatlong = new google.maps.LatLng(data[row][1],data[row][2]);
 				from = "checked";
 			} else {
-				tolatlong = new google.maps.LatLng(csv[row][1],csv[row][2]);
-				var weight = parseFloat(csv[row][8]);
-				var weight_hum = csv[row][4].split('=')[1];
+				tolatlong = new google.maps.LatLng(data[row][1],data[row][2]);
+				var weight = parseFloat(data[row][8]);
+				var weight_hum = data[row][4].split('=')[1];
 				
 				var path = [fromlatlong, tolatlong];
 				
@@ -401,7 +382,7 @@ function initialize_nodes(year, data){
 				    strokeWeight: weight,
 					year: year,
 					weight: weight_hum,
-					label: csv[row][3],
+					label: data[row][3],
 					visible: false,
 				};
 				
@@ -515,4 +496,46 @@ function increase(){
 		show_map(y);
 		
 	}
+}
+
+function save(){
+    console.log('save clicked...');
+    $('#downloadlink').empty();
+    $.get('scaffold.template',function(data){
+        
+       var save_page = $('<html></html>');
+       
+       var $scaffold = $(data);
+
+       
+       var data_text = JSON.stringify(data_cache);
+       
+       var exported_text = "var exported = true ;\n";
+       var data_export_text = "var data_export = " + data_text + ";\n";
+       
+       
+       $scaffold.filter('#scaffoldjs').text(exported_text + data_export_text);
+       
+       
+       
+       var api_key = $('#apikey').val();
+       console.log(api_key);
+       var api_uri = "https://maps.googleapis.com/maps/api/js?key="+api_key+"&sensor=false"
+       $scaffold.filter('#googleapi').attr('src',api_uri);
+
+      
+       
+       save_page.append($scaffold);
+       
+       $.base64.utf8encode = true;
+    
+       var datauri = "data:text/html;charset=utf-8;base64," + $.base64.btoa(save_page.html());
+       $("#downloadlink").append("<div class='alert alert-success'><a href='" + datauri + "'>Download HTML-page</a></div>");
+       $("#downloadlink").append("<div class='alert alert-info'>Right click the link above, and select 'Save link as...' from the context menu</div>")
+       
+    });
+
+    
+    
+    
 }
