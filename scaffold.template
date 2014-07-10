@@ -129,7 +129,7 @@
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-<script src="js/jquery.base64.js"></script>
+<script src="http://data2semantics.github.io/PatViz/js/jquery.base64.js"></script>
 
 
 
@@ -147,7 +147,7 @@
 
 </script>
 
-<script src="js/patents.js"></script>
+<script src="http://data2semantics.github.io/PatViz/js/patents.js"></script>
 
 
 
@@ -200,14 +200,14 @@
 		<div class="row">
 			<div class='col-md-12'>
 				<hr/>
-				<img style="height: 50px; float: left;" src="img/logo-no-subtitle-150dpi-small.png"/>
-				<img style="height: 50px; float: left;" src="img/COMMIT_logo_RGB.jpg"/>
+				<img style="height: 50px; float: left;" src="http://data2semantics.github.io/PatViz/img/logo-no-subtitle-150dpi-small.png"/>
+				<img style="height: 50px; float: left;" src="http://data2semantics.github.io/PatViz/img/COMMIT_logo_RGB.jpg"/>
 				<div style="float:left;">
 					<small><strong>PatViz</strong> - Patent Collaboration Visualizer, Copyright (c) 2013, Rinke Hoekstra and Loet Leydesdorff<br/>
 						For more information, please visit the <a href="http://www.leydesdorff.net/software/patstat/">companion website</a> (on PatStat only), or if you would like to run this tool locally, visit our <a href="http://github.com/Data2Semantics/PatViz" target="_new">GitHub</a> pages.</small>
 				</div>
-				<img style="height: 50px; float: right;" src="img/uva.png"/>
-				<img style="height: 50px; float: right;" src="img/VUlogo_EN_Wit_FC_tcm9-201388.png"/>
+				<img style="height: 50px; float: right;" src="http://data2semantics.github.io/PatViz/img/uva.png"/>
+				<img style="height: 50px; float: right;" src="http://data2semantics.github.io/PatViz/img/VUlogo_EN_Wit_FC_tcm9-201388.png"/>
 			</div>
 		</div>
 	</div>
