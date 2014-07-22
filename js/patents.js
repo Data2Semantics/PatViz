@@ -501,12 +501,12 @@ function increase(){
 function save(){
     console.log('save clicked...');
     $('#downloadlink').empty();
-    $.get('http://data2semantics.github.io/PatViz/scaffold.template',function(data){
+    // $.getJSON('http://data2semantics.github.io/PatViz/scaffold.template?callback=?',function(data){
         
        var save_page = $('<html></html>');
        
-       var $scaffold = $(data);
-
+       //var $scaffold = $(data);
+       var $scaffold = $(scaffold_template);
        
        var data_text = JSON.stringify(data_cache);
        
@@ -533,7 +533,7 @@ function save(){
        $("#downloadlink").append("<div class='alert alert-success'><a href='" + datauri + "'>Download HTML-page</a></div>");
        $("#downloadlink").append("<div class='alert alert-info'>Right click the link above, and select 'Save link as...' from the context menu</div>")
        
-    });
+    // });
 
     
     
