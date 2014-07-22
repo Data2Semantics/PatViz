@@ -501,7 +501,7 @@ function increase(){
 function save(){
     console.log('save clicked...');
     $('#downloadlink').empty();
-    $.get('scaffold.template',function(data){
+    $.get('http://data2semantics.github.io/PatViz/scaffold.template',function(data){
         
        var save_page = $('<html></html>');
        
